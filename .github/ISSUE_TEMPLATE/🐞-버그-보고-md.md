@@ -1,8 +1,8 @@
 ---
 name: "\U0001F41E-버그-보고.md"
 about: Describe this issue template's purpose here.
-title: issue
-labels: ''
+title: "[bug] 버그 요약"
+labels: "\U0001F41B bugfix"
 assignees: sohyun119
 
 ---
@@ -19,17 +19,14 @@ assignees: ''
 ## 🐞 버그 설명
 버그에 대한 간단한 설명을 작성해주세요.
 
-## 🚶‍♂️ 재현 단계
-1. `어떤` 페이지로 이동
-2. `어떤` 버튼을 클릭
-3. `어떤` 동작이 발생
-4. ...
-
 ## 🤔 기대한 결과
 정상적으로 동작했을 때 기대되는 결과를 적어주세요.
 
 ## 😥 실제 결과
 버그로 인해 발생한 실제 결과를 적어주세요.
 
-## 📸 스크린샷 / 로그
-버그와 관련된 스크린샷 또는 로그를 첨부해주세요. (선택 사항)
+## ✅ Todo
+- [ ] todo
+- [ ] todo
+- [ ] todo
+- [ ] todo
