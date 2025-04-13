@@ -2,10 +2,12 @@ package com.sparta.limited.limited_service.limited_product.presentation.controll
 
 import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductCreateRequest;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductCreateResponse;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
 import com.sparta.limited.limited_service.limited_product.application.service.LimitedProductService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,15 @@ public class LimitedProductController {
 
         LimitedProductCreateResponse response = limitedProductService.createLimitedProduct(
             productId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{limitedProductId}")
+    public ResponseEntity<LimitedProductReadResponse> getLimitedProduct(
+        @PathVariable("limitedProductId") UUID limitedProductId) {
+
+        LimitedProductReadResponse response = limitedProductService.getLimitedProduct(
+            limitedProductId);
         return ResponseEntity.ok(response);
     }
 
