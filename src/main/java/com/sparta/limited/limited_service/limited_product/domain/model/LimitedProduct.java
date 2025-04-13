@@ -1,6 +1,7 @@
 package com.sparta.limited.limited_service.limited_product.domain.model;
 
 import com.sparta.limited.common_module.common.BaseEntity;
+import com.sparta.limited.limited_service.limited_product.domain.exception.LimitedProductNoQuantityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,5 +56,12 @@ public class LimitedProduct extends BaseEntity {
     public static LimitedProduct of(UUID productId, String title, String description,
         BigDecimal price, Integer quantity) {
         return new LimitedProduct(productId, title, description, price, quantity);
+    }
+
+    public void updateQuantity() {
+        if (quantity <= 0) {
+            throw new LimitedProductNoQuantityException(productId);
+        }
+        this.quantity--;
     }
 }
