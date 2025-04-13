@@ -6,3 +6,7 @@ X-User-Id: 123
 {
   "quantity": 10
 }
+
+### 한정수량 상품 단일 조회
+GET http://localhost:8081/api/v1/limited-products/6340b658-29fc-43ea-a672-c806781b756a
+Content-Type: application/json
