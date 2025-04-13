@@ -1,1 +1,11 @@
-spring.application.name=limited-service
+spring:
+  application:
+    name: limited-service
+
+  config:
+    import:
+      - classpath:properties/datasource.yml
+      - classpath:properties/jpa.yml
+
+server:
+  port: 8081

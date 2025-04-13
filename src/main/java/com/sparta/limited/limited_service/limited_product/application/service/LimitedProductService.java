@@ -1,0 +1,34 @@
+package com.sparta.limited.limited_service.limited_product.application.service;
+
+import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductCreateRequest;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductCreateResponse;
+import com.sparta.limited.limited_service.limited_product.application.mapper.LimitedProductMapper;
+import com.sparta.limited.limited_service.limited_product.application.service.product.ProductService;
+import com.sparta.limited.limited_service.limited_product.application.service.product.dto.ProductInfo;
+import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
+import com.sparta.limited.limited_service.limited_product.domain.repository.LimitedProductRepository;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class LimitedProductService {
+
+    private final LimitedProductRepository limitedProductRepository;
+    private final ProductService productService;
+
+    @Transactional
+    public LimitedProductCreateResponse createLimitedProduct(UUID productId,
+        LimitedProductCreateRequest request) {
+
+        ProductInfo productInfo = productService.getProduct(productId);
+
+        LimitedProduct limitedProduct = LimitedProductMapper.toCreateEntity(productInfo,
+            request);
+
+        limitedProductRepository.save(limitedProduct);
+        return LimitedProductMapper.toCreateResponse(limitedProduct);
+    }
+}
