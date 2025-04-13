@@ -8,6 +8,6 @@ public class LimitedProductNotFoundException extends BusinessException {
 
     public LimitedProductNotFoundException(UUID limitedProductId) {
         super(ErrorCode.RESOURCES_NOT_FOUND,
-            "Limited Product Not Found - id : {} " + limitedProductId);
+            "Limited Product Not Found - id : " + limitedProductId);
     }
 }
