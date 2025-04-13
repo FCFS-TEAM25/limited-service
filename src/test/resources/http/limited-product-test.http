@@ -1,0 +1,8 @@
+### 한정수량 상품 생성
+POST http://localhost:8081/api/v1/limited-products/b373def5-9b53-42cd-ab09-b07caf26189c
+Content-Type: application/json
+X-User-Id: 123
+
+{
+  "quantity": 10
+}
