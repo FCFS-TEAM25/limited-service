@@ -3,6 +3,7 @@ package com.sparta.limited.limited_service.limited_product.application.service;
 import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductCreateRequest;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductCreateResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductUpdateResponse;
 import com.sparta.limited.limited_service.limited_product.application.mapper.LimitedProductMapper;
 import com.sparta.limited.limited_service.limited_product.application.service.product.ProductService;
 import com.sparta.limited.limited_service.limited_product.application.service.product.dto.ProductInfo;
@@ -38,5 +39,14 @@ public class LimitedProductService {
 
         LimitedProduct limitedProduct = limitedProductRepository.findById(limitedProductId);
         return LimitedProductMapper.toReadResponse(limitedProduct);
+    }
+
+    @Transactional
+    public LimitedProductUpdateResponse updateLimitedProductQuantity(UUID limitedProductId) {
+
+        LimitedProduct limitedProduct = limitedProductRepository.findById(limitedProductId);
+
+        limitedProduct.updateQuantity();
+        return LimitedProductMapper.toUpdateResponse(limitedProduct);
     }
 }
