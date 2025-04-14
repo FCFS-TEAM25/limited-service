@@ -6,6 +6,6 @@ spring:
     import:
       - classpath:properties/datasource.yml
       - classpath:properties/jpa.yml
-
+      - classpath:properties/eureka.yml
 server:
-  port: 8081
+  port: 19095
