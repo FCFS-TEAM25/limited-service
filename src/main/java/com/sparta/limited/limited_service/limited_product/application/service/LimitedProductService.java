@@ -9,6 +9,8 @@ import com.sparta.limited.limited_service.limited_product.application.service.pr
 import com.sparta.limited.limited_service.limited_product.application.service.product.dto.ProductInfo;
 import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
 import com.sparta.limited.limited_service.limited_product.domain.repository.LimitedProductRepository;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,5 +50,9 @@ public class LimitedProductService {
 
         limitedProduct.updateQuantity();
         return LimitedProductMapper.toUpdateResponse(limitedProduct);
+    }
+
+    public Map<UUID, LimitedProduct> getLimitedProductsByids(List<UUID> limitedProductIds) {
+        return limitedProductRepository.findAllById(limitedProductIds);
     }
 }
