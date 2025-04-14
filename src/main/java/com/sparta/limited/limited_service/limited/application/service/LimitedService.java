@@ -2,19 +2,26 @@ package com.sparta.limited.limited_service.limited.application.service;
 
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedResponse;
 import com.sparta.limited.limited_service.limited.application.mapper.LimitedMapper;
+import com.sparta.limited.limited_service.limited.application.service.limited_product.LimitedProductFacade;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class LimitedService {
 
     private final LimitedRepository limitedRepository;
+    private final LimitedProductFacade limitedProductFacade;
 
+    @Transactional
     public LimitedCreateResponse createLimitedEvent(UUID limitedProductId,
         LimitedCreateRequest request) {
 
@@ -22,5 +29,17 @@ public class LimitedService {
 
         limitedRepository.save(limited);
         return LimitedMapper.toCreateResponse(limited);
+    }
+
+    @Transactional(readOnly = true)
+    public LimitedReadResponse getLimitedEvent(UUID limitedEventId) {
+
+        Limited limited = limitedRepository.findById(limitedEventId);
+        LimitedResponse limitedResponse = LimitedMapper.toResponse(limited);
+
+        LimitedProductResponse limitedProductResponse = limitedProductFacade.getLimitedProduct(
+            limited.getLimitedProductId());
+
+        return LimitedMapper.toReadResponse(limitedResponse, limitedProductResponse);
     }
 }
