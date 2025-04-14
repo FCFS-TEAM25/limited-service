@@ -1,5 +1,5 @@
 ### 한정수량 이벤트 생성
-POST http://localhost:8080/api/v1/2ba0ad9f-29ef-4bd5-be09-cb59b715fb43
+POST http://localhost:8080/api/v1/limited-events/2ba0ad9f-29ef-4bd5-be09-cb59b715fb43
 Content-Type: application/json
 X-User-Id: 123
 
@@ -7,3 +7,7 @@ X-User-Id: 123
   "startDate": "2025-04-15 12:23:47.506690",
   "endDate": "2025-04-15 12:23:47.506690"
 }
+
+### 한정수량 이벤트 단건 조회
+GET http://localhost:8080/api/v1/limited-events/6340b658-29fc-43ea-a672-c806781b756a
+Content-Type: application/json
