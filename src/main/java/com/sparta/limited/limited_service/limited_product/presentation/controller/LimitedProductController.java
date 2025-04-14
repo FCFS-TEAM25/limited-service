@@ -7,6 +7,7 @@ import com.sparta.limited.limited_service.limited_product.application.dto.respon
 import com.sparta.limited.limited_service.limited_product.application.service.LimitedProductService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ public class LimitedProductController {
 
         LimitedProductCreateResponse response = limitedProductService.createLimitedProduct(
             productId, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{limitedProductId}")
