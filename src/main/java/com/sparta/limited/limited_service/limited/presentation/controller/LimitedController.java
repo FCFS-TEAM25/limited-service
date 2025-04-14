@@ -4,7 +4,7 @@ import com.sparta.limited.limited_service.limited.application.dto.request.Limite
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
-import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateCloseStatusResponse;
 import com.sparta.limited.limited_service.limited.application.service.LimitedService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +56,11 @@ public class LimitedController {
     }
 
     @PatchMapping("/{limitedEventId}/status-close")
-    public ResponseEntity<LimitedUpdateStatusResponse> closeLimitedEvent(
+    public ResponseEntity<LimitedUpdateCloseStatusResponse> closeLimitedEvent(
         @PathVariable UUID limitedEventId) {
 
-        LimitedUpdateStatusResponse response = limitedService.updateStatusClose(limitedEventId);
+        LimitedUpdateCloseStatusResponse response = limitedService.updateStatusClose(
+            limitedEventId);
         return ResponseEntity.ok(response);
     }
 
