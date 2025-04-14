@@ -2,10 +2,14 @@ package com.sparta.limited.limited_service.limited.presentation.controller;
 
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.service.LimitedService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +43,14 @@ public class LimitedController {
 
         LimitedReadResponse response = limitedService.getLimitedEvent(limitedEventId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<LimitedListResponse>> getLimitedEvents(
+        @PageableDefault() Pageable pageable) {
+
+        Page<LimitedListResponse> responses = limitedService.getLimitedEvents(pageable);
+        return ResponseEntity.ok(responses);
     }
 
 

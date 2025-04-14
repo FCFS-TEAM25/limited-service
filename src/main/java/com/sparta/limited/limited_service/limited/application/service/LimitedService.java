@@ -2,6 +2,7 @@ package com.sparta.limited.limited_service.limited.application.service;
 
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedResponse;
@@ -9,8 +10,13 @@ import com.sparta.limited.limited_service.limited.application.mapper.LimitedMapp
 import com.sparta.limited.limited_service.limited.application.service.limited_product.LimitedProductFacade;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +47,21 @@ public class LimitedService {
             limited.getLimitedProductId());
 
         return LimitedMapper.toReadResponse(limitedResponse, limitedProductResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<LimitedListResponse> getLimitedEvents(Pageable pageable) {
+
+        Page<Limited> limitedPage = limitedRepository.findAll(pageable);
+
+        Map<UUID, String> limitedProductTitles = limitedProductFacade.getLimitedProductTitles(
+            limitedPage.stream().map(Limited::getLimitedProductId).distinct().toList());
+
+        List<LimitedListResponse> responses = limitedPage.stream()
+            .map(limited -> LimitedMapper.toListResponse(
+                limited, limitedProductTitles.get(limited.getLimitedProductId())))
+            .toList();
+
+        return new PageImpl<>(responses, pageable, limitedPage.getTotalElements());
     }
 }
