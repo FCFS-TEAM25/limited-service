@@ -2,8 +2,11 @@ package com.sparta.limited.limited_service.limited.infrastructure.repository;
 
 import com.sparta.limited.limited_service.limited.domain.exception.LimitedEventNotFoundException;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
+import com.sparta.limited.limited_service.limited.domain.model.Limited.LimitedStatus;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
 import com.sparta.limited.limited_service.limited.infrastructure.persistence.JpaLimitedRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,5 +33,15 @@ public class LimitedRepositoryImpl implements LimitedRepository {
     @Override
     public Page<Limited> findAll(Pageable pageable) {
         return jpaLimitedRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Limited> findByStatusAndStartDateBefore(LimitedStatus status, LocalDateTime now) {
+        return jpaLimitedRepository.findByStatusAndStartDateBefore(status, now);
+    }
+
+    @Override
+    public List<Limited> findByStatusAndEndDateBefore(LimitedStatus status, LocalDateTime now) {
+        return jpaLimitedRepository.findByStatusAndEndDateBefore(status, now);
     }
 }
