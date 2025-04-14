@@ -6,14 +6,14 @@ import java.util.UUID;
 import lombok.Getter;
 
 @Getter
-public class LimitedUpdateCloseStatusResponse {
+public class LimitedUpdateStatusResponse {
 
     private final UUID id;
     private final LimitedStatus status;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 
-    private LimitedUpdateCloseStatusResponse(UUID id, LimitedStatus status,
+    private LimitedUpdateStatusResponse(UUID id, LimitedStatus status,
         LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.status = status;
@@ -21,9 +21,9 @@ public class LimitedUpdateCloseStatusResponse {
         this.endDate = endDate;
     }
 
-    public static LimitedUpdateCloseStatusResponse of(UUID id, LimitedStatus status,
+    public static LimitedUpdateStatusResponse of(UUID id, LimitedStatus status,
         LocalDateTime startDate, LocalDateTime endDate) {
-        return new LimitedUpdateCloseStatusResponse(id, status, startDate, endDate);
+        return new LimitedUpdateStatusResponse(id, status, startDate, endDate);
     }
 
 }
