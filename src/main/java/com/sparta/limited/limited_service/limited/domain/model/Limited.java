@@ -63,10 +63,14 @@ public class Limited extends BaseEntity {
         ACTIVE("한정수량 이벤트 진행중"),
         CLOSED("한정수량 이벤트 진행 종료");
 
-        private String description;
+        private final String description;
 
         LimitedStatus(String description) {
             this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 
