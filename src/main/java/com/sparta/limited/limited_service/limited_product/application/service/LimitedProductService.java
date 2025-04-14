@@ -5,7 +5,7 @@ import com.sparta.limited.limited_service.limited_product.application.dto.respon
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductUpdateResponse;
 import com.sparta.limited.limited_service.limited_product.application.mapper.LimitedProductMapper;
-import com.sparta.limited.limited_service.limited_product.application.service.product.ProductService;
+import com.sparta.limited.limited_service.limited_product.application.service.product.ProductClientService;
 import com.sparta.limited.limited_service.limited_product.application.service.product.dto.ProductInfo;
 import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
 import com.sparta.limited.limited_service.limited_product.domain.repository.LimitedProductRepository;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LimitedProductService {
 
     private final LimitedProductRepository limitedProductRepository;
-    private final ProductService productService;
+    private final ProductClientService productService;
 
     @Transactional
     public LimitedProductCreateResponse createLimitedProduct(UUID productId,
