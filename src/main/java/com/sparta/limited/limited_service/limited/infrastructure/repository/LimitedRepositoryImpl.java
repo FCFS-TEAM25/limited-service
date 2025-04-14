@@ -6,6 +6,8 @@ import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepos
 import com.sparta.limited.limited_service.limited.infrastructure.persistence.JpaLimitedRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,5 +25,10 @@ public class LimitedRepositoryImpl implements LimitedRepository {
     public Limited findById(UUID limitedEventId) {
         return jpaLimitedRepository.findById(limitedEventId)
             .orElseThrow(() -> new LimitedEventNotFoundException(limitedEventId));
+    }
+
+    @Override
+    public Page<Limited> findAll(Pageable pageable) {
+        return jpaLimitedRepository.findAll(pageable);
     }
 }
