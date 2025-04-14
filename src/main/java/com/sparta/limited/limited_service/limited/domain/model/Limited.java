@@ -64,6 +64,10 @@ public class Limited extends BaseEntity {
         status = LimitedStatus.CLOSED;
     }
 
+    public void updateStatusActive() {
+        status = LimitedStatus.ACTIVE;
+    }
+
     public enum LimitedStatus {
         PENDING("한정수량 이벤트 진행 대기"),
         ACTIVE("한정수량 이벤트 진행중"),

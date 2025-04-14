@@ -59,7 +59,8 @@ public class LimitedController {
     public ResponseEntity<LimitedUpdateStatusResponse> closeLimitedEvent(
         @PathVariable UUID limitedEventId) {
 
-        LimitedUpdateStatusResponse response = limitedService.updateStatusClose(limitedEventId);
+        LimitedUpdateStatusResponse response = limitedService.updateStatusClose(
+            limitedEventId);
         return ResponseEntity.ok(response);
     }
 

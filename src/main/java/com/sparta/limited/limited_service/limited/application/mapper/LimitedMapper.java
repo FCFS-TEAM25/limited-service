@@ -13,7 +13,7 @@ import java.util.UUID;
 public class LimitedMapper {
 
     public static Limited toCreateEntity(UUID limitedProductId, LimitedCreateRequest request) {
-        
+
         return Limited.createOf(limitedProductId, request.getStartDate(), request.getEndDate());
     }
 
