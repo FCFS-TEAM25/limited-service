@@ -1,5 +1,6 @@
 package com.sparta.limited.limited_service.limited.infrastructure.repository;
 
+import com.sparta.limited.limited_service.limited.domain.exception.LimitedEventNotFoundException;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
 import com.sparta.limited.limited_service.limited.infrastructure.persistence.JpaLimitedRepository;
@@ -21,6 +22,6 @@ public class LimitedRepositoryImpl implements LimitedRepository {
     @Override
     public Limited findById(UUID limitedEventId) {
         return jpaLimitedRepository.findById(limitedEventId)
-            .orElse(null);
+            .orElseThrow(() -> new LimitedEventNotFoundException(limitedEventId));
     }
 }
