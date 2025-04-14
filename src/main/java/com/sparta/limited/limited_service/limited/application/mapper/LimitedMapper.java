@@ -2,6 +2,9 @@ package com.sparta.limited.limited_service.limited.application.mapper;
 
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedResponse;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import java.util.UUID;
 
@@ -12,8 +15,20 @@ public class LimitedMapper {
     }
 
     public static LimitedCreateResponse toCreateResponse(Limited limited) {
+
         return LimitedCreateResponse.of(limited.getId(), limited.getLimitedProductId(),
             limited.getStartDate(), limited.getEndDate(), limited.getStatus());
+    }
+
+    public static LimitedResponse toResponse(Limited limited) {
+        return LimitedResponse.of(limited.getId(), limited.getStartDate(),
+            limited.getEndDate(), limited.getStatus());
+    }
+
+    public static LimitedReadResponse toReadResponse(
+        LimitedResponse limited, LimitedProductResponse limitedProduct) {
+
+        return LimitedReadResponse.of(limited, limitedProduct);
     }
 
 }
