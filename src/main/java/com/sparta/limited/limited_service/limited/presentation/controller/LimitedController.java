@@ -4,6 +4,7 @@ import com.sparta.limited.limited_service.limited.application.dto.request.Limite
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
 import com.sparta.limited.limited_service.limited.application.service.LimitedService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +53,14 @@ public class LimitedController {
 
         Page<LimitedListResponse> responses = limitedService.getLimitedEvents(pageable);
         return ResponseEntity.ok(responses);
+    }
+
+    @PatchMapping("/{limitedEventId}/status-close")
+    public ResponseEntity<LimitedUpdateStatusResponse> closeLimitedEvent(
+        @PathVariable UUID limitedEventId) {
+
+        LimitedUpdateStatusResponse response = limitedService.updateStatusClose(limitedEventId);
+        return ResponseEntity.ok(response);
     }
 
 
