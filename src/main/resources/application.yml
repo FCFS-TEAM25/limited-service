@@ -1,3 +1,6 @@
+server:
+  port: 19095
+
 spring:
   application:
     name: limited-service
@@ -7,5 +10,3 @@ spring:
       - classpath:properties/datasource.yml
       - classpath:properties/jpa.yml
       - classpath:properties/eureka.yml
-server:
-  port: 19095
