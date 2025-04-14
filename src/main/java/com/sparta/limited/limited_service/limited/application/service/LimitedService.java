@@ -58,14 +58,9 @@ public class LimitedService {
             limitedPage.stream().map(Limited::getLimitedProductId).distinct().toList());
 
         List<LimitedListResponse> responses = limitedPage.stream()
-            .map(limited -> LimitedListResponse.of(
-                limited.getId(),
-                limited.getLimitedProductId(),
-                limitedProductTitles.get(limited.getLimitedProductId()),
-                limited.getStartDate(),
-                limited.getEndDate(),
-                limited.getStatus()
-            )).toList();
+            .map(limited -> LimitedMapper.toListResponse(
+                limited, limitedProductTitles.get(limited.getLimitedProductId())))
+            .toList();
 
         return new PageImpl<>(responses, pageable, limitedPage.getTotalElements());
     }

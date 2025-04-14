@@ -33,10 +33,10 @@ public class LimitedMapper {
     }
 
     public static LimitedListResponse toListResponse(
-        Limited limited, LimitedProductResponse limitedProduct) {
+        Limited limited, String title) {
 
-        return LimitedListResponse.of(limited.getId(), limitedProduct.getId(),
-            limitedProduct.getTitle(), limited.getStartDate(), limited.getEndDate(),
+        return LimitedListResponse.of(limited.getId(), limited.getLimitedProductId(),
+            title, limited.getStartDate(), limited.getEndDate(),
             limited.getStatus());
     }
 
