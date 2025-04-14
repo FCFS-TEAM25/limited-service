@@ -6,6 +6,7 @@ import com.sparta.limited.limited_service.limited.application.dto.response.Limit
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
 import com.sparta.limited.limited_service.limited.application.mapper.LimitedMapper;
 import com.sparta.limited.limited_service.limited.application.service.limited_product.LimitedProductFacade;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
@@ -63,5 +64,15 @@ public class LimitedService {
             .toList();
 
         return new PageImpl<>(responses, pageable, limitedPage.getTotalElements());
+    }
+
+    @Transactional
+    public LimitedUpdateStatusResponse updateStatusClose(UUID limitedEventId) {
+
+        Limited limited = limitedRepository.findById(limitedEventId);
+
+        limited.updateStatusClose();
+
+        return LimitedMapper.toUpdateStatusResponse(limited);
     }
 }
