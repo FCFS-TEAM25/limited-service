@@ -2,6 +2,7 @@ package com.sparta.limited.limited_service.limited.domain.model;
 
 
 import com.sparta.limited.common_module.common.BaseEntity;
+import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedCloseStatusValidator;
 import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedDateValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +57,11 @@ public class Limited extends BaseEntity {
     public static Limited createOf(UUID limitedProductId, LocalDateTime startDate,
         LocalDateTime endDate) {
         return new Limited(limitedProductId, startDate, endDate, LimitedStatus.PENDING);
+    }
+
+    public void updateStatusClose() {
+        LimitedCloseStatusValidator.validateStatus(this.status);
+        status = LimitedStatus.CLOSED;
     }
 
     public enum LimitedStatus {
