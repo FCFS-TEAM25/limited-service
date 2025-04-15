@@ -20,6 +20,7 @@ import com.sparta.limited.limited_service.limited.application.service.limited_pr
 import com.sparta.limited.limited_service.limited.application.service.order.OrderClientService;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.model.LimitedPurchaseUser;
+import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedStatusValidator;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedPurchaseRepository;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
 import java.util.List;
@@ -96,6 +97,8 @@ public class LimitedService {
         LimitedOrderRequest request) {
 
         Limited limited = limitedRepository.findById(limitedEventId);
+
+        LimitedStatusValidator.validateStatusIsActive(limitedEventId, limited.getStatus());
 
         LimitedProductInfo productInfo = limitedProductFacade.decreaseQuantity(
             limited.getLimitedProductId());
