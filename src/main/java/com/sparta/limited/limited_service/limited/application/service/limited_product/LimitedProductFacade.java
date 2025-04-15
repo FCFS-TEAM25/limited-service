@@ -1,6 +1,8 @@
 package com.sparta.limited.limited_service.limited.application.service.limited_product;
 
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
+import com.sparta.limited.limited_service.limited.application.service.limited_product.dto.LimitedProductInfo;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductDecreaseQuantityResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
 import com.sparta.limited.limited_service.limited_product.application.service.LimitedProductService;
 import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
@@ -35,6 +37,14 @@ public class LimitedProductFacade {
                 Map.Entry::getKey,
                 entry -> entry.getValue().getTitle()
             ));
+    }
+
+    public LimitedProductInfo decreaseQuantity(UUID limitedProductId) {
+        LimitedProductDecreaseQuantityResponse response = limitedProductService.decreaseQuantity(
+            limitedProductId);
+
+        return LimitedProductInfo.from(response.getId(),
+            response.getProductId(), response.getQuantity(), response.getPrice());
     }
 
 }

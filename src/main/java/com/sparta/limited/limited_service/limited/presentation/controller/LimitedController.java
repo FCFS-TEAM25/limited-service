@@ -1,8 +1,10 @@
 package com.sparta.limited.limited_service.limited.presentation.controller;
 
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
+import com.sparta.limited.limited_service.limited.application.dto.request.LimitedOrderRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedPurchaseOrderResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
 import com.sparta.limited.limited_service.limited.application.service.LimitedService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,6 +65,17 @@ public class LimitedController {
         LimitedUpdateStatusResponse response = limitedService.updateStatusClose(
             limitedEventId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{limitedEventId}")
+    public ResponseEntity<LimitedPurchaseOrderResponse> purchaseOrder(
+        @RequestHeader("X-User-Id") Long userId,
+        @PathVariable UUID limitedEventId,
+        @RequestBody LimitedOrderRequest limitedOrderRequest) {
+
+        LimitedPurchaseOrderResponse response = limitedService.purchaseOrder(userId,
+            limitedEventId, limitedOrderRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 

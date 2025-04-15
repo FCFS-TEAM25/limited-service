@@ -3,14 +3,12 @@ package com.sparta.limited.limited_service.limited.application.mapper;
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
-import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
-import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import java.util.UUID;
 
-public class LimitedMapper {
+public class LimitedEventMapper {
 
     public static Limited toCreateEntity(UUID limitedProductId, LimitedCreateRequest request) {
 
@@ -29,11 +27,6 @@ public class LimitedMapper {
             limited.getEndDate(), limited.getStatus());
     }
 
-    public static LimitedReadResponse toReadResponse(
-        LimitedResponse limited, LimitedProductResponse limitedProduct) {
-
-        return LimitedReadResponse.of(limited, limitedProduct);
-    }
 
     public static LimitedListResponse toListResponse(
         Limited limited, String title) {
