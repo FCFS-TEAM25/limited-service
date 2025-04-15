@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -42,6 +43,9 @@ public class Limited extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private LimitedStatus status;
+
+    @Version
+    private Integer version;
 
     private Limited(UUID limitedProductId, LocalDateTime startDate,
         LocalDateTime endDate, LimitedStatus status) {
