@@ -12,4 +12,6 @@ public interface LimitedProductRepository {
     LimitedProduct findById(UUID limitedProductId);
 
     Map<UUID, LimitedProduct> findAllById(List<UUID> limitedProductIds);
+
+    LimitedProduct findByIdWithLock(UUID limitedProductId);
 }

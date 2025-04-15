@@ -29,8 +29,7 @@ public class LimitedProductService {
 
         ProductInfo productInfo = productService.getProduct(productId);
 
-        LimitedProduct limitedProduct = LimitedProductMapper.toCreateEntity(productInfo,
-            request);
+        LimitedProduct limitedProduct = LimitedProductMapper.toCreateEntity(productInfo, request);
 
         limitedProductRepository.save(limitedProduct);
         return LimitedProductMapper.toCreateResponse(limitedProduct);
@@ -47,9 +46,10 @@ public class LimitedProductService {
     public LimitedProductDecreaseQuantityResponse decreaseQuantity(
         UUID limitedProductId) {
 
-        LimitedProduct limitedProduct = limitedProductRepository.findById(limitedProductId);
+        LimitedProduct limitedProduct = limitedProductRepository.findByIdWithLock(limitedProductId);
 
         limitedProduct.decreaseQuantity();
+
         return LimitedProductMapper.toDecreaseQuantityResponse(limitedProduct);
     }
 
