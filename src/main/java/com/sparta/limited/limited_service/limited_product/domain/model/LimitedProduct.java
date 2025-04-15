@@ -58,7 +58,7 @@ public class LimitedProduct extends BaseEntity {
         return new LimitedProduct(productId, title, description, price, quantity);
     }
 
-    public void updateQuantity() {
+    public void decreaseQuantity() {
         if (quantity <= 0) {
             throw new LimitedProductNoQuantityException(productId);
         }

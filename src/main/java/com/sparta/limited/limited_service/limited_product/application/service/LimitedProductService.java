@@ -2,8 +2,8 @@ package com.sparta.limited.limited_service.limited_product.application.service;
 
 import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductCreateRequest;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductCreateResponse;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductDecreaseQuantityResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
-import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductUpdateResponse;
 import com.sparta.limited.limited_service.limited_product.application.mapper.LimitedProductMapper;
 import com.sparta.limited.limited_service.limited_product.application.service.product.ProductClientService;
 import com.sparta.limited.limited_service.limited_product.application.service.product.dto.ProductInfo;
@@ -44,12 +44,13 @@ public class LimitedProductService {
     }
 
     @Transactional
-    public LimitedProductUpdateResponse updateLimitedProductQuantity(UUID limitedProductId) {
+    public LimitedProductDecreaseQuantityResponse decreaseQuantity(
+        UUID limitedProductId) {
 
         LimitedProduct limitedProduct = limitedProductRepository.findById(limitedProductId);
 
-        limitedProduct.updateQuantity();
-        return LimitedProductMapper.toUpdateResponse(limitedProduct);
+        limitedProduct.decreaseQuantity();
+        return LimitedProductMapper.toDecreaseQuantityResponse(limitedProduct);
     }
 
     public Map<UUID, LimitedProduct> getLimitedProductsByids(List<UUID> limitedProductIds) {

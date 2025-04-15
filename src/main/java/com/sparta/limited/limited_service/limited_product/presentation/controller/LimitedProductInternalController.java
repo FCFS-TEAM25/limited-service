@@ -1,6 +1,6 @@
 package com.sparta.limited.limited_service.limited_product.presentation.controller;
 
-import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductUpdateResponse;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductDecreaseQuantityResponse;
 import com.sparta.limited.limited_service.limited_product.application.service.LimitedProductService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,10 @@ public class LimitedProductInternalController {
     private final LimitedProductService limitedProductService;
 
     @PutMapping("/{limitedProductId}/quantity")
-    public ResponseEntity<LimitedProductUpdateResponse> updateLimitedProductQuantity(
+    public ResponseEntity<LimitedProductDecreaseQuantityResponse> updateLimitedProductQuantity(
         @PathVariable("limitedProductId") UUID limitedProductId) {
 
-        LimitedProductUpdateResponse response = limitedProductService.updateLimitedProductQuantity(
+        LimitedProductDecreaseQuantityResponse response = limitedProductService.decreaseQuantity(
             limitedProductId);
         return ResponseEntity.ok(response);
     }
