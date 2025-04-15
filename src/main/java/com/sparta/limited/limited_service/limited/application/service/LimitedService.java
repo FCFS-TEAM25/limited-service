@@ -97,17 +97,14 @@ public class LimitedService {
 
         Limited limited = limitedRepository.findById(limitedEventId);
 
-        log.info("재고 조회 및 감소");
         LimitedProductInfo productInfo = limitedProductFacade.decreaseQuantity(
             limited.getLimitedProductId());
 
-        log.info("주문");
         UUID orderId = orderClientService.createOrder(userId, productInfo, request);
         LimitedOrderResponse orderResponse = LimitedOrderMapper.toOrderResponse(orderId,
             productInfo,
             request);
 
-        log.info("구매자 로그 저장");
         LimitedPurchaseUser purchaseUser = LimitedPurchaseUser.of(userId, limitedEventId);
         limitedPurchaseRepository.save(purchaseUser);
         LimitedPurchaseResponse purchaseResponse = LimitedPurchaseMapper.toPurchaseResponse(
