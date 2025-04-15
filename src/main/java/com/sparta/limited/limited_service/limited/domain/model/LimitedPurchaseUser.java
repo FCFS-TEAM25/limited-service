@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_limited_event_user")
-public class LimitedEventUser extends BaseEntity {
+public class LimitedPurchaseUser extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,13 +30,12 @@ public class LimitedEventUser extends BaseEntity {
     private UUID limitedEventId;
 
 
-    private LimitedEventUser(UUID id, Long userId, UUID limitedEventId) {
-        this.id = id;
+    private LimitedPurchaseUser(Long userId, UUID limitedEventId) {
         this.userId = userId;
         this.limitedEventId = limitedEventId;
     }
 
-    public LimitedEventUser of(UUID id, Long userId, UUID limitedEventId) {
-        return new LimitedEventUser(id, userId, limitedEventId);
+    public static LimitedPurchaseUser of(Long userId, UUID limitedEventId) {
+        return new LimitedPurchaseUser(userId, limitedEventId);
     }
 }
