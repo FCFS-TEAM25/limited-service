@@ -67,7 +67,7 @@ public class LimitedController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{limitedEventId}")
+    @PostMapping("/{limitedEventId}/purchase")
     public ResponseEntity<LimitedPurchaseOrderResponse> purchaseOrder(
         @RequestHeader("X-User-Id") Long userId,
         @PathVariable UUID limitedEventId,
