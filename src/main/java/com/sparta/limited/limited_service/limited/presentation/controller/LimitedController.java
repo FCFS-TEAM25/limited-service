@@ -1,5 +1,6 @@
 package com.sparta.limited.limited_service.limited.presentation.controller;
 
+import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedOrderRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
@@ -31,8 +32,10 @@ public class LimitedController {
 
     private final LimitedService limitedService;
 
+    @RoleCheck("ROLE_ADMIN")
     @PostMapping("/{limitedProductId}")
     public ResponseEntity<LimitedCreateResponse> createLimitedEvent(
+        @RequestHeader("X-User-id") Long userId,
         @PathVariable UUID limitedProductId,
         @RequestBody LimitedCreateRequest request) {
 
@@ -58,8 +61,10 @@ public class LimitedController {
         return ResponseEntity.ok(responses);
     }
 
+    @RoleCheck("ROLE_ADMIN")
     @PatchMapping("/{limitedEventId}/status-close")
     public ResponseEntity<LimitedUpdateStatusResponse> closeLimitedEvent(
+        @RequestHeader("X-User-Id") Long userId,
         @PathVariable UUID limitedEventId) {
 
         LimitedUpdateStatusResponse response = limitedService.updateStatusClose(
