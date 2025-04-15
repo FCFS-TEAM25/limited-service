@@ -4,7 +4,7 @@ Content-Type: application/json
 X-User-Id: 123
 
 {
-  "startDate": "2025-04-15T18:12:45.123",
+  "startDate": "2025-04-15T22:12:45.123",
   "endDate": "2025-04-16T18:12:45.123"
 }
 
@@ -38,5 +38,14 @@ GET http://localhost:8080/api/v1/limited-events
 Content-Type: application/json
 
 ### 한정판매 이벤트 종료 처리
-PATCH http://localhost:8080/api/v1/limited-events//68aa8af2-9eb3-4a80-8142-fa60a5b8acd7/status-close
+PATCH http://localhost:8080/api/v1/limited-events/68aa8af2-9eb3-4a80-8142-fa60a5b8acd7/status-close
 Content-Type: application/json
+
+### 한정판매 구매 - order feign client 제외 테스트 성공
+POST http://localhost:8080/api/v1/limited-events/6788620f-dec3-4916-864c-0a2406a02de5/purchase
+Content-Type: application/json
+X-User-Id: 123
+
+{
+  "quantity": 1
+}

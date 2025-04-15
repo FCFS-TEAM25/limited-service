@@ -12,5 +12,5 @@ GET http://localhost:8080/api/v1/limited-products/6340b658-29fc-43ea-a672-c80678
 Content-Type: application/json
 
 ### 한정수량 상품 재고 수량 (감소) 수정
-PUT http://localhost:8080/api/v1/limited-products/6340b658-29fc-43ea-a672-c806781b756a/quantity
+PUT http://localhost:19095/api/v1/internal/limited-products/6340b658-29fc-43ea-a672-c806781b756a/quantity
 Content-Type: application/json
