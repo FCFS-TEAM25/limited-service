@@ -35,4 +35,10 @@ public class LimitedProductRepositoryImpl implements LimitedProductRepository {
             .stream()
             .collect(Collectors.toMap(LimitedProduct::getId, Function.identity()));
     }
+
+    @Override
+    public LimitedProduct findByIdWithLock(UUID limitedProductId) {
+        return jpaLimitedProductRepository.findByIdWithLock(limitedProductId)
+            .orElseThrow(() -> new LimitedProductNotFoundException(limitedProductId));
+    }
 }

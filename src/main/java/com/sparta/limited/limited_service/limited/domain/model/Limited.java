@@ -2,8 +2,8 @@ package com.sparta.limited.limited_service.limited.domain.model;
 
 
 import com.sparta.limited.common_module.common.BaseEntity;
-import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedCloseStatusValidator;
 import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedDateValidator;
+import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedStatusValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -43,6 +44,9 @@ public class Limited extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LimitedStatus status;
 
+    @Version
+    private Integer version;
+
     private Limited(UUID limitedProductId, LocalDateTime startDate,
         LocalDateTime endDate, LimitedStatus status) {
 
@@ -60,7 +64,7 @@ public class Limited extends BaseEntity {
     }
 
     public void updateStatusClose() {
-        LimitedCloseStatusValidator.validateStatus(this.status);
+        LimitedStatusValidator.validateStatusAlreadyClose(this.status);
         status = LimitedStatus.CLOSED;
     }
 

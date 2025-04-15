@@ -18,15 +18,19 @@ import com.sparta.limited.limited_service.limited.application.mapper.LimitedPurc
 import com.sparta.limited.limited_service.limited.application.service.limited_product.LimitedProductFacade;
 import com.sparta.limited.limited_service.limited.application.service.limited_product.dto.LimitedProductInfo;
 import com.sparta.limited.limited_service.limited.application.service.order.OrderClientService;
+import com.sparta.limited.limited_service.limited.domain.exception.LimitedEventUnableChangeStatusException;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.model.LimitedPurchaseUser;
+import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedStatusValidator;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedPurchaseRepository;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
+import jakarta.persistence.OptimisticLockException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -86,9 +90,14 @@ public class LimitedService {
 
         Limited limited = limitedRepository.findById(limitedEventId);
 
-        limited.updateStatusClose();
+        try {
+            limited.updateStatusClose();
+            return LimitedEventMapper.toUpdateStatusResponse(limited);
+        } catch (OptimisticLockException | StaleObjectStateException e) {
+            log.warn("이벤트 종료 실패 (낙관적 락) - id : {}, 에러메세지 : {} ", limitedEventId, e.getMessage());
+            throw new LimitedEventUnableChangeStatusException(limitedEventId);
+        }
 
-        return LimitedEventMapper.toUpdateStatusResponse(limited);
     }
 
     @Transactional
@@ -97,17 +106,16 @@ public class LimitedService {
 
         Limited limited = limitedRepository.findById(limitedEventId);
 
-        log.info("재고 조회 및 감소");
+        LimitedStatusValidator.validateStatusIsActive(limitedEventId, limited.getStatus());
+
         LimitedProductInfo productInfo = limitedProductFacade.decreaseQuantity(
             limited.getLimitedProductId());
 
-        log.info("주문");
         UUID orderId = orderClientService.createOrder(userId, productInfo, request);
         LimitedOrderResponse orderResponse = LimitedOrderMapper.toOrderResponse(orderId,
             productInfo,
             request);
 
-        log.info("구매자 로그 저장");
         LimitedPurchaseUser purchaseUser = LimitedPurchaseUser.of(userId, limitedEventId);
         limitedPurchaseRepository.save(purchaseUser);
         LimitedPurchaseResponse purchaseResponse = LimitedPurchaseMapper.toPurchaseResponse(

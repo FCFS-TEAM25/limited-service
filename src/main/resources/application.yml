@@ -10,3 +10,8 @@ spring:
       - classpath:properties/datasource.yml
       - classpath:properties/jpa.yml
       - classpath:properties/eureka.yml
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
