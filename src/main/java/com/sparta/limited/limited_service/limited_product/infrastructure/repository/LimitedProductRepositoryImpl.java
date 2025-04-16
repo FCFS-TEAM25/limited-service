@@ -41,4 +41,10 @@ public class LimitedProductRepositoryImpl implements LimitedProductRepository {
         return jpaLimitedProductRepository.findByIdWithLock(limitedProductId)
             .orElseThrow(() -> new LimitedProductNotFoundException(limitedProductId));
     }
+
+    @Override
+    public LimitedProduct findByProductId(UUID productId) {
+        return jpaLimitedProductRepository.findByProductId(productId)
+            .orElseThrow(() -> new LimitedProductNotFoundException(productId));
+    }
 }
