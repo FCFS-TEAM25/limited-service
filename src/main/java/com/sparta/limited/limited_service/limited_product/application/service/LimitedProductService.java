@@ -1,9 +1,11 @@
 package com.sparta.limited.limited_service.limited_product.application.service;
 
 import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductCreateRequest;
+import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductUpdateRequest;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductCreateResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductDecreaseQuantityResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
+import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductUpdateResponse;
 import com.sparta.limited.limited_service.limited_product.application.mapper.LimitedProductMapper;
 import com.sparta.limited.limited_service.limited_product.application.service.product.ProductClientService;
 import com.sparta.limited.limited_service.limited_product.application.service.product.dto.ProductInfo;
@@ -55,5 +57,17 @@ public class LimitedProductService {
 
     public Map<UUID, LimitedProduct> getLimitedProductsByids(List<UUID> limitedProductIds) {
         return limitedProductRepository.findAllById(limitedProductIds);
+    }
+
+    @Transactional
+    public LimitedProductUpdateResponse updateLimitedProduct(UUID productId,
+        LimitedProductUpdateRequest request) {
+        try {
+            LimitedProduct limitedProduct = limitedProductRepository.findByProductId(productId);
+            limitedProduct.updateLimitedProduct(request.getDescription(), request.getPrice());
+            return LimitedProductUpdateResponse.success();
+        } catch (Exception e) {
+            return LimitedProductUpdateResponse.error();
+        }
     }
 }
