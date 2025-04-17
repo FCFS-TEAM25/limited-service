@@ -64,4 +64,9 @@ public class LimitedProduct extends BaseEntity {
         }
         this.quantity--;
     }
+
+    public void updateLimitedProduct(String description, BigDecimal price) {
+        this.description = description;
+        this.price = price;
+    }
 }

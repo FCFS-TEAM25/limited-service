@@ -4,11 +4,7 @@ import com.sparta.limited.limited_service.limited_product.domain.exception.Limit
 import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
 import com.sparta.limited.limited_service.limited_product.domain.repository.LimitedProductRepository;
 import com.sparta.limited.limited_service.limited_product.infrastructure.persistence.JpaLimitedProductRepository;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -29,16 +25,16 @@ public class LimitedProductRepositoryImpl implements LimitedProductRepository {
             .orElseThrow(() -> new LimitedProductNotFoundException(limitedProductId));
     }
 
-    @Override
-    public Map<UUID, LimitedProduct> findAllById(List<UUID> limitedProductIds) {
-        return jpaLimitedProductRepository.findAllById(limitedProductIds)
-            .stream()
-            .collect(Collectors.toMap(LimitedProduct::getId, Function.identity()));
-    }
 
     @Override
     public LimitedProduct findByIdWithLock(UUID limitedProductId) {
         return jpaLimitedProductRepository.findByIdWithLock(limitedProductId)
             .orElseThrow(() -> new LimitedProductNotFoundException(limitedProductId));
+    }
+
+    @Override
+    public LimitedProduct findByProductId(UUID productId) {
+        return jpaLimitedProductRepository.findByProductId(productId)
+            .orElseThrow(() -> new LimitedProductNotFoundException(productId));
     }
 }

@@ -9,6 +9,7 @@ import com.sparta.limited.limited_service.limited.application.dto.response.Limit
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
 import com.sparta.limited.limited_service.limited.application.service.LimitedService;
+import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +43,13 @@ public class LimitedController {
 
         LimitedCreateResponse response = limitedService.createLimitedEvent(limitedProductId,
             request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/v1/limited-events/{id}")
+            .buildAndExpand(response.getId())
+            .toUri();
+
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping("/{limitedEventId}")

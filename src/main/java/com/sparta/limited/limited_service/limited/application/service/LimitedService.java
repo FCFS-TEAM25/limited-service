@@ -25,8 +25,8 @@ import com.sparta.limited.limited_service.limited.domain.model.validator.Limited
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedPurchaseRepository;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
 import jakarta.persistence.OptimisticLockException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,17 +72,18 @@ public class LimitedService {
     @Transactional(readOnly = true)
     public Page<LimitedListResponse> getLimitedEvents(Pageable pageable) {
 
-        Page<Limited> limitedPage = limitedRepository.findAll(pageable);
+        List<LimitedListResponse> result = new ArrayList<>();
 
-        Map<UUID, String> limitedProductTitles = limitedProductFacade.getLimitedProductTitles(
-            limitedPage.stream().map(Limited::getLimitedProductId).distinct().toList());
+        List<Limited> limitedList = limitedRepository.findAll();
 
-        List<LimitedListResponse> responses = limitedPage.stream()
-            .map(limited -> LimitedEventMapper.toListResponse(
-                limited, limitedProductTitles.get(limited.getLimitedProductId())))
-            .toList();
+        limitedList.forEach(limited -> {
+            LimitedProductResponse limitedProductResponse = limitedProductFacade.getLimitedProduct(
+                limited.getLimitedProductId());
+            result.add(
+                LimitedEventMapper.toListResponse(limited, limitedProductResponse.getTitle()));
+        });
 
-        return new PageImpl<>(responses, pageable, limitedPage.getTotalElements());
+        return new PageImpl<>(result, pageable, limitedList.size());
     }
 
     @Transactional
