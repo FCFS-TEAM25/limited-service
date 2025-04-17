@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 public class OrderCreateRequest {
 
     private UUID productId;
-    private String orderType;
+    private OrderType orderType;
     private BigDecimal price;
     private Integer quantity;
 
     public OrderCreateRequest(UUID productId, BigDecimal price, Integer quantity) {
         this.productId = productId;
-        this.orderType = OrderType.LIMITED.toString();
+        this.orderType = OrderType.LIMITED;
         this.price = price;
         this.quantity = quantity;
     }
