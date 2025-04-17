@@ -5,11 +5,7 @@ import com.sparta.limited.limited_service.limited.application.service.limited_pr
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductDecreaseQuantityResponse;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductReadResponse;
 import com.sparta.limited.limited_service.limited_product.application.service.LimitedProductService;
-import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +23,6 @@ public class LimitedProductFacade {
             response.getDescription(), response.getPrice(), response.getQuantity());
     }
 
-    public Map<UUID, String> getLimitedProductTitles(List<UUID> limitedProductIds) {
-
-        Map<UUID, LimitedProduct> map = limitedProductService.getLimitedProductsByids(
-            limitedProductIds);
-
-        return map.entrySet().stream()
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                entry -> entry.getValue().getTitle()
-            ));
-    }
 
     public LimitedProductInfo decreaseQuantity(UUID limitedProductId) {
         LimitedProductDecreaseQuantityResponse response = limitedProductService.decreaseQuantity(
