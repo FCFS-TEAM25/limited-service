@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient("order-service")
+@FeignClient(name = "order-service", url = "localhost:19094/api/v1/internal/orders")
 public interface OrderFeignClient {
 
-    @PostMapping("/api/v1/internal/orders")
+    @PostMapping
     OrderCreateResponse createOrder(
         @RequestHeader("X-User-Id") Long userId,
         @RequestBody OrderCreateRequest request);
