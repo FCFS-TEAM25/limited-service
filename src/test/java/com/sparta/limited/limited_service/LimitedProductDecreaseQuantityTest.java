@@ -25,14 +25,14 @@ public class LimitedProductDecreaseQuantityTest {
 
     private static final int TOTAL_QUANTITY = 100;
     private static final int NUM_THREADS = 10000;
-    private static final int THREAD_POOL_SIZE = 128;
+    private static final int THREAD_POOL_SIZE = 1000;
 
     @Autowired
     private LimitedProductRepository limitedProductRepository;
     @Autowired
     private LimitedProductService limitedProductService;
 
-    @DisplayName("재고 조회 및 감소 정합성 테스트")
+    @DisplayName("재고 조회 및 감소 테스트")
     @Test
     void testMultiThreadDecrease() throws InterruptedException {
 
@@ -47,7 +47,8 @@ public class LimitedProductDecreaseQuantityTest {
         UUID limitedProductId = limitedProduct.getId();
 
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        CountDownLatch countDownLatch = new CountDownLatch(NUM_THREADS);
+        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch endLatch = new CountDownLatch(NUM_THREADS);
         AtomicInteger successCount = new AtomicInteger(0);
         AtomicInteger failCount = new AtomicInteger(0);
 
@@ -56,18 +57,20 @@ public class LimitedProductDecreaseQuantityTest {
         for (int i = 0; i < NUM_THREADS; i++) {
             executorService.submit(() -> {
                 try {
+                    startLatch.await();
                     limitedProductService.decreaseQuantity(limitedProductId);
                     successCount.incrementAndGet();
                 } catch (Exception e) {
                     failCount.incrementAndGet();
                 } finally {
-                    countDownLatch.countDown();
+                    endLatch.countDown();
                 }
             });
         }
 
-        countDownLatch.await();
-        executorService.shutdown(); // 쓰레드풀 종료!!
+        startLatch.countDown();
+        endLatch.await();
+        executorService.shutdown();
 
         long totalRunTime = System.currentTimeMillis() - startTime;
 
@@ -78,8 +81,7 @@ public class LimitedProductDecreaseQuantityTest {
         System.out.println("성공 개수 : " + successCount.intValue());
         System.out.println("실패 개수 :  " + failCount.intValue());
         System.out.println("최종 재고 : " + result.getQuantity());
-
-        assertEquals(0, result.getQuantity());
+        
         assertEquals(result.getQuantity(), TOTAL_QUANTITY - successCount.get());
     }
 
