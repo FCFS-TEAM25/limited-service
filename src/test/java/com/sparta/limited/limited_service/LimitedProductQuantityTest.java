@@ -5,6 +5,7 @@ import com.sparta.limited.limited_service.limited_product.domain.model.LimitedPr
 import com.sparta.limited.limited_service.limited_product.domain.repository.LimitedProductRepository;
 import java.math.BigDecimal;
 import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class LimitedProductQuantityTest {
     @Autowired
     private LimitedProductService limitedProductService;
 
+    @DisplayName("잘못된 통합테스트 코드 ")
     @Test
     public void testLimitedProductQuantityLocking() throws InterruptedException {
         logger.info("초기 상품 설정");

@@ -17,7 +17,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -81,7 +83,7 @@ public class LimitedProductDecreaseQuantityTest {
         System.out.println("성공 개수 : " + successCount.intValue());
         System.out.println("실패 개수 :  " + failCount.intValue());
         System.out.println("최종 재고 : " + result.getQuantity());
-        
+
         assertEquals(result.getQuantity(), TOTAL_QUANTITY - successCount.get());
     }
 
