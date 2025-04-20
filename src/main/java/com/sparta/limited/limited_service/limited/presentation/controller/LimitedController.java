@@ -1,5 +1,6 @@
 package com.sparta.limited.limited_service.limited.presentation.controller;
 
+import com.sparta.limited.common_module.common.annotation.CurrentUserId;
 import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedCreateRequest;
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedOrderRequest;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,7 +37,7 @@ public class LimitedController {
     @RoleCheck("ROLE_ADMIN")
     @PostMapping("/{limitedProductId}")
     public ResponseEntity<LimitedCreateResponse> createLimitedEvent(
-        @RequestHeader("X-User-id") Long userId,
+        @CurrentUserId Long userId,
         @PathVariable UUID limitedProductId,
         @RequestBody LimitedCreateRequest request) {
 
@@ -72,7 +72,7 @@ public class LimitedController {
     @RoleCheck("ROLE_ADMIN")
     @PatchMapping("/{limitedEventId}/status-close")
     public ResponseEntity<LimitedUpdateStatusResponse> closeLimitedEvent(
-        @RequestHeader("X-User-Id") Long userId,
+        @CurrentUserId Long userId,
         @PathVariable UUID limitedEventId) {
 
         LimitedUpdateStatusResponse response = limitedService.updateStatusClose(
@@ -82,7 +82,7 @@ public class LimitedController {
 
     @PostMapping("/{limitedEventId}/purchase")
     public ResponseEntity<LimitedPurchaseOrderResponse> purchaseOrder(
-        @RequestHeader("X-User-Id") Long userId,
+        @CurrentUserId Long userId,
         @PathVariable UUID limitedEventId,
         @RequestBody LimitedOrderRequest limitedOrderRequest) {
 

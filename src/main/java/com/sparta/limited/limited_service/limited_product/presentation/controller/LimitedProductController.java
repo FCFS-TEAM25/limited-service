@@ -1,5 +1,6 @@
 package com.sparta.limited.limited_service.limited_product.presentation.controller;
 
+import com.sparta.limited.common_module.common.annotation.CurrentUserId;
 import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.limited_service.limited_product.application.dto.request.LimitedProductCreateRequest;
 import com.sparta.limited.limited_service.limited_product.application.dto.response.LimitedProductCreateResponse;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,7 +28,7 @@ public class LimitedProductController {
     @RoleCheck("ROLE_ADMIN")
     @PostMapping("/{productId}")
     public ResponseEntity<LimitedProductCreateResponse> createLimitedProduct(
-        @RequestHeader("X-User-Id") Long userId,
+        @CurrentUserId Long userId,
         @PathVariable("productId") UUID productId,
         @RequestBody LimitedProductCreateRequest request) {
 
