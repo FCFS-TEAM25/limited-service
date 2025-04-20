@@ -56,6 +56,7 @@ public class Limited extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.version = 0;
     }
 
     public static Limited createOf(UUID limitedProductId, LocalDateTime startDate,
