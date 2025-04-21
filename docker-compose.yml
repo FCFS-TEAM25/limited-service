@@ -1,5 +1,6 @@
 services:
   limited-service:
+    platform: linux/amd64
     build:
       dockerfile: Dockerfile
     image: sohyun119/limited-server:latest
