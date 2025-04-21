@@ -1,0 +1,5 @@
+services:
+  limited-service:
+    build:
+      dockerfile: Dockerfile
+    image: sohyun119/limited-server:latest
