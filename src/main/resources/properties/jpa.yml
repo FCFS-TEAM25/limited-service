@@ -1,7 +1,5 @@
 spring:
-  config:
-    activate:
-      on-profile: local
+  config.activate.on-profile: local
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,9 +10,7 @@ spring:
         highlight_sql: true
 ---
 spring:
-  config:
-    activate:
-      on-profile: test
+  config.activate.on-profile: test
   jpa:
     hibernate:
       ddl-auto: create-drop

@@ -6,3 +6,4 @@ eureka:
       defaultZone: ${EUREKA_DEFAULT_ZONE}
   instance:
     prefer-ip-address: true
+    ip-address: host.docker.internal
