@@ -35,8 +35,8 @@ ext {
 }
 
 dependencies {
-    implementation 'com.sparta.limited:common-module:1.4.0'
-    
+    implementation 'com.sparta.limited:common-module:1.4.1'
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 

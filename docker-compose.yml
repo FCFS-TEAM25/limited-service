@@ -1,6 +1,24 @@
 services:
   limited-service:
-    platform: linux/amd64
+    container_name: limited-service
+    image: sohyun119/limited-service:latest
+    env_file:
+      - .env
     build:
+      context: .
       dockerfile: Dockerfile
-    image: sohyun119/limited-server:latest
+      args:
+        USERNAME: ${USERNAME}
+        SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - '19095:19095'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    mem_limit: 1024mb
+    cpus: 0.5
+    networks:
+      - limited-team25
+
+networks:
+  limited-team25:
+    external: true

@@ -1,7 +1,5 @@
 spring:
-  config:
-    activate:
-      on-profile: local
+  config.activate.on-profile: local
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,11 +8,11 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
+
 ---
+
 spring:
-  config:
-    activate:
-      on-profile: test
+  config.activate.on-profile: test
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -24,3 +22,15 @@ spring:
         format_sql: true
         highlight_sql: true
 
+---
+
+spring:
+  config.activate.on-profile: docker
+  jpa:
+    hibernate:
+      ddl-auto: ${DOCKER_DDL_AUTO}
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true

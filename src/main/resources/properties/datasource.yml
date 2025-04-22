@@ -1,9 +1,7 @@
 spring:
-  config:
-    activate:
-      on-profile: local
+  config.activate.on-profile: local
   datasource:
-    url: ${POSTGRES_URL_USER}
+    url: ${POSTGRES_URL}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -11,11 +9,19 @@ spring:
 ---
 
 spring:
-  config:
-    activate:
-      on-profile: test
+  config.activate.on-profile: test
   datasource:
-    url: ${TEST_POSTGRES_URL_USER}
+    url: ${TEST_POSTGRES_URL}
     username: ${TEST_POSTGRES_USER}
     password: ${TEST_POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+---
+
+spring:
+  config.activate.on-profile: docker
+  datasource:
+    url: ${DOCKER_POSTGRES_URL}
+    username: ${DOCKER_POSTGRES_USER}
+    password: ${DOCKER_POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
