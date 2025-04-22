@@ -1,9 +1,30 @@
+spring:
+  config.activate.on-profile: local
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_DEFAULT_ZONE}
-  instance:
-    prefer-ip-address: true
-    ip-address: host.docker.internal
+
+---
+
+spring:
+  config.activate.on-profile: test
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+
+---
+
+spring:
+  config.activate.on-profile: docker
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${DOCKER_EUREKA_DEFAULT_ZONE}
