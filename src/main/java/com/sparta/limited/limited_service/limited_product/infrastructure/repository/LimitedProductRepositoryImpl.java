@@ -1,5 +1,6 @@
 package com.sparta.limited.limited_service.limited_product.infrastructure.repository;
 
+import com.sparta.limited.limited_service.limited_product.domain.exception.LimitedProductNoQuantityException;
 import com.sparta.limited.limited_service.limited_product.domain.exception.LimitedProductNotFoundException;
 import com.sparta.limited.limited_service.limited_product.domain.model.LimitedProduct;
 import com.sparta.limited.limited_service.limited_product.domain.repository.LimitedProductRepository;
@@ -28,6 +29,10 @@ public class LimitedProductRepositoryImpl implements LimitedProductRepository {
 
     @Override
     public LimitedProduct findByIdWithLock(UUID limitedProductId) {
+        if (!jpaLimitedProductRepository.existsQuantityGreaterThanZero(limitedProductId)) {
+            throw new LimitedProductNoQuantityException(limitedProductId);
+        }
+
         return jpaLimitedProductRepository.findByIdWithLock(limitedProductId)
             .orElseThrow(() -> new LimitedProductNotFoundException(limitedProductId));
     }
