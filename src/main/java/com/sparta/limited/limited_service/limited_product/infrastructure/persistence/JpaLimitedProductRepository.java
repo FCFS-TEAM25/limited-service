@@ -14,5 +14,8 @@ public interface JpaLimitedProductRepository extends JpaRepository<LimitedProduc
     @Query("select p from LimitedProduct p where p.id = :id")
     Optional<LimitedProduct> findByIdWithLock(UUID id);
 
+    @Query("select count(p) > 0 from LimitedProduct p where p.id = :id and p.quantity > 0")
+    boolean existsQuantityGreaterThanZero(UUID id);
+
     Optional<LimitedProduct> findByProductId(UUID productId);
 }
