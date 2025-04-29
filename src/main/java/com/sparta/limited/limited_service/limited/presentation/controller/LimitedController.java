@@ -6,7 +6,7 @@ import com.sparta.limited.limited_service.limited.application.dto.request.Limite
 import com.sparta.limited.limited_service.limited.application.dto.request.LimitedOrderRequest;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedCreateResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
-import com.sparta.limited.limited_service.limited.application.dto.response.LimitedPurchaseOrderResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedPurchaseAcceptResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedUpdateStatusResponse;
 import com.sparta.limited.limited_service.limited.application.service.LimitedService;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -81,14 +80,14 @@ public class LimitedController {
     }
 
     @PostMapping("/{limitedEventId}/purchase")
-    public ResponseEntity<LimitedPurchaseOrderResponse> purchaseOrder(
+    public ResponseEntity<LimitedPurchaseAcceptResponse> purchaseOrder(
         @CurrentUserId Long userId,
         @PathVariable UUID limitedEventId,
         @RequestBody LimitedOrderRequest limitedOrderRequest) {
 
-        LimitedPurchaseOrderResponse response = limitedService.purchaseOrder(userId,
+        LimitedPurchaseAcceptResponse response = limitedService.purchaseOrderRedis(userId,
             limitedEventId, limitedOrderRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.ok(response);
     }
 
 
