@@ -12,4 +12,4 @@ spring:
       - classpath:properties/jpa.yml
       - classpath:properties/eureka.yml
       - classpath:properties/prometheus.yml
-
+      - classpath:properties/redis.yml
