@@ -18,8 +18,8 @@ public class LimitedRepositoryImpl implements LimitedRepository {
     private final JpaLimitedRepository jpaLimitedRepository;
 
     @Override
-    public void save(Limited limited) {
-        jpaLimitedRepository.save(limited);
+    public Limited save(Limited limited) {
+        return jpaLimitedRepository.save(limited);
     }
 
     @Override
