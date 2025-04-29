@@ -9,7 +9,6 @@ public interface LimitedProductRepository {
 
     LimitedProduct findById(UUID limitedProductId);
 
-    LimitedProduct findByIdWithLock(UUID limitedProductId);
-
     LimitedProduct findByProductId(UUID productId);
+    
 }
