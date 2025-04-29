@@ -42,14 +42,12 @@ public class LimitedProductService {
         return LimitedProductMapper.toReadResponse(limitedProduct);
     }
 
+
     @Transactional
-    public LimitedProductDecreaseQuantityResponse decreaseQuantity(
+    public LimitedProductDecreaseQuantityResponse decreaseQuantity(Integer quantity,
         UUID limitedProductId) {
-
-        LimitedProduct limitedProduct = limitedProductRepository.findByIdWithLock(limitedProductId);
-
-        limitedProduct.decreaseQuantity();
-
+        LimitedProduct limitedProduct = limitedProductRepository.findById(limitedProductId);
+        limitedProduct.decreaseQuantity(quantity);
         return LimitedProductMapper.toDecreaseQuantityResponse(limitedProduct);
     }
 
