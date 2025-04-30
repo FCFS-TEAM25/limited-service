@@ -6,9 +6,8 @@
   예외 시나리오 :재고가 0일때 주문시도시 예외처리 / 로그인하지 않은 상태라면 예외처리
 */
 import http from 'k6/http';
-import { check } from 'k6';
-import { Counter } from 'k6/metrics';
-import { Trend } from 'k6/metrics';
+import {check} from 'k6';
+import {Counter, Trend} from 'k6/metrics';
 
 export const options = {
   vus: 1000,
@@ -25,9 +24,7 @@ export const successResponseTime = new Trend('success_response_time');
 export const quantityOutTime = new Trend('quantity_out_time');
 export const failedResponseTime = new Trend('failed_response_time');
 
-
-
-export default function (data) {
+export default function () {
 
   const purchaseUrl = `http://limited-service:19095/api/v1/limited-events/2c76e9e4-b19f-4fb9-b275-3bdf910492bb/purchase`;
 
@@ -56,17 +53,17 @@ export default function (data) {
       return ok;
     },
 
-    '재고 없음 (400)' : (r) => {
+    '재고 없음 (400)': (r) => {
       const noQuantity = r.status === 400;
-      if(noQuantity){
+      if (noQuantity) {
         quantityOutOrder.add(1);
         quantityOutTime.add(purchaseRes.timings.duration);
       }
       return noQuantity;
     },
-    '중복 구매 방지 (409)' : (r) => {
+    '중복 구매 방지 (409)': (r) => {
       const duplicationUserId = r.status === 409;
-      if(duplicationUserId){
+      if (duplicationUserId) {
         duplicationOrder.add(1);
       }
       return duplicationUserId;
@@ -74,7 +71,7 @@ export default function (data) {
 
     '요청 실패': (r) => {
       const error = r.status !== 200 && r.status !== 400 && r.status !== 409;
-      if(error){
+      if (error) {
         failedOrder.add(1);
         failedResponseTime.add(purchaseRes.timings.duration);
       }
