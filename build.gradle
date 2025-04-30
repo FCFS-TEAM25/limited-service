@@ -35,7 +35,7 @@ ext {
 }
 
 dependencies {
-    implementation 'com.sparta.limited:common-module:1.4.1'
+    implementation 'com.sparta.limited:common-module:1.4.6'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
