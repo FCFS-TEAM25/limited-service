@@ -21,7 +21,7 @@ public class PurchaseRetryProcessor {
     private final ObjectMapper objectMapper;
     private final StringRedisTemplate redisTemplate;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 10000)
     public void retryPurchasesFail() {
         try {
             List<String> failedPurchases = new ArrayList<>();
@@ -44,8 +44,11 @@ public class PurchaseRetryProcessor {
                 } catch (Exception e) {
                     log.error("구매 재처리 실패: {}", purchase, e);
 
-                    if (data.retryCount() >= 3) {
-                        log.error("구매 재처리 3회 실패 : {}", purchase, e);
+                    if (data.retryCount() >= 5) {
+                        log.error("구매 재처리 5회 실패 : {}", purchase, e);
+                        String retryFailJson = objectMapper.writeValueAsString(data);
+                        redisTemplate.opsForList()
+                            .rightPush("purchase_retry_fail_list", retryFailJson);
                     } else {
                         PurchaseData retryData = new PurchaseData(
                             data.limitedEventId(),
