@@ -34,7 +34,8 @@ public class RedisService {
     public void updatePurchaseConfirmed(UUID limitedEventId, Long userId, LocalDateTime endDate) {
         String key = "limited_purchase:" + limitedEventId + ":" + userId;
 
-        stringRedisTemplate.opsForValue().set(key, "CONFIRMED", setTtlSeconds(endDate));
+        stringRedisTemplate.opsForValue()
+            .set(key, "CONFIRMED", Duration.ofSeconds(setTtlSeconds(endDate)));
     }
 
     // 주문 실패시 재고 복구
@@ -49,7 +50,7 @@ public class RedisService {
     }
 
     private Long setTtlSeconds(LocalDateTime date) {
-        return Math.max(0, Duration.between(LocalDateTime.now(), date).toSeconds());
+        return Math.max(1, Duration.between(LocalDateTime.now(), date).toSeconds());
     }
 
 }
