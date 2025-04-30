@@ -29,7 +29,7 @@ redis.call('EXPIRE', KEYS[2], 900);
 
 
 -- 구매 성공 시
-redis.call('LPUSH', 'purchase_success_list', cjson.encode({
+redis.call('RPUSH', 'purchase_success_list', cjson.encode({
   limitedEventId = ARGV[4],
   userId = ARGV[5],
   quantity = ARGV[3],
