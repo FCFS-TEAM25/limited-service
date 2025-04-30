@@ -15,6 +15,14 @@ public class LimitedProductFacade {
 
     private final LimitedProductService limitedProductService;
 
+    public LimitedProductInfo decreaseLimitedProductQuantity(Integer orderQuantity,
+        UUID limitedProductId) {
+        LimitedProductDecreaseQuantityResponse response = limitedProductService.decreaseQuantity(
+            orderQuantity, limitedProductId);
+        return LimitedProductInfo.from(response.getId(), response.getProductId(),
+            response.getQuantity(), response.getPrice());
+    }
+
     public LimitedProductResponse getLimitedProduct(UUID limitedProductId) {
         LimitedProductReadResponse response = limitedProductService.getLimitedProduct(
             limitedProductId);
@@ -23,13 +31,11 @@ public class LimitedProductFacade {
             response.getDescription(), response.getPrice(), response.getQuantity());
     }
 
-
-    public LimitedProductInfo decreaseQuantity(UUID limitedProductId) {
-        LimitedProductDecreaseQuantityResponse response = limitedProductService.decreaseQuantity(
+    public LimitedProductInfo getLimitedProductInfo(UUID limitedProductId) {
+        LimitedProductReadResponse response = limitedProductService.getLimitedProduct(
             limitedProductId);
-
-        return LimitedProductInfo.from(response.getId(),
-            response.getProductId(), response.getQuantity(), response.getPrice());
+        return LimitedProductInfo.from(response.getId(), response.getProductId(),
+            response.getQuantity(), response.getPrice());
     }
 
 }

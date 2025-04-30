@@ -1,5 +1,7 @@
 server:
   port: 19095
+  error:
+    include-message: always
 
 spring:
   application:
@@ -12,10 +14,11 @@ spring:
       - classpath:properties/jpa.yml
       - classpath:properties/eureka.yml
       - classpath:properties/prometheus.yml
+      - classpath:properties/redis.yml
   profiles:
     active: local
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: info
+    org.springframework: info

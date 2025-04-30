@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface LimitedRepository {
 
-    void save(Limited limited);
+    Limited save(Limited limited);
 
     Limited findById(UUID limitedEventId);
 

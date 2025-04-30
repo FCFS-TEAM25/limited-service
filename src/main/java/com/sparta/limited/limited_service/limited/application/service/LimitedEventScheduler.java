@@ -3,6 +3,7 @@ package com.sparta.limited.limited_service.limited.application.service;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.model.Limited.LimitedStatus;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
+import com.sparta.limited.limited_service.limited.infrastructure.redis.RedisService;
 import jakarta.persistence.OptimisticLockException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LimitedEventScheduler {
 
     private final LimitedRepository limitedRepository;
+    private final RedisService redisService;
 
     @Scheduled(cron = "0 * * * * *")
     @Transactional
@@ -32,6 +34,9 @@ public class LimitedEventScheduler {
         toStart.forEach(limited -> {
             try {
                 limited.updateStatusActive();
+
+                redisService.generateLimitedEventStatus(limited.getId(), limited.getEndDate());
+                
             } catch (OptimisticLockException | StaleObjectStateException e) {
                 log.warn("ACTIVE 로 상태 변경 실패 (낙관적 락) - id : {}, 에러메세지 : {}",
                     limited.getId(), e.getMessage());

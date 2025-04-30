@@ -1,0 +1,20 @@
+spring:
+  config.activate.on-profile: local
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: 6379
+---
+spring:
+  config.activate.on-profile: test
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: 6379
+---
+spring:
+  config.activate.on-profile: docker
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: 6379

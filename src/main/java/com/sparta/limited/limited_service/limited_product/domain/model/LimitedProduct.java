@@ -58,11 +58,11 @@ public class LimitedProduct extends BaseEntity {
         return new LimitedProduct(productId, title, description, price, quantity);
     }
 
-    public void decreaseQuantity() {
-        if (quantity <= 0) {
+    public void decreaseQuantity(Integer quantity) {
+        if (this.quantity < quantity) {
             throw new LimitedProductNoQuantityException(productId);
         }
-        this.quantity--;
+        this.quantity -= quantity;
     }
 
     public void updateLimitedProduct(String description, BigDecimal price) {

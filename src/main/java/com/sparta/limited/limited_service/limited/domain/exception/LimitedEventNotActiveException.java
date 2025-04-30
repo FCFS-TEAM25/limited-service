@@ -7,6 +7,11 @@ import java.util.UUID;
 
 public class LimitedEventNotActiveException extends BusinessException {
 
+    public LimitedEventNotActiveException(UUID LimitedEventId) {
+        super(ErrorCode.OPERATION_NOT_ALLOWED,
+            "진행중인 이벤트가 아닙니다. Id : " + LimitedEventId);
+    }
+
     public LimitedEventNotActiveException(UUID LimitedEventId, LimitedStatus limitedStatus) {
         super(ErrorCode.OPERATION_NOT_ALLOWED,
             "진행중인 이벤트가 아닙니다. Id : " + LimitedEventId + ",  status : " + limitedStatus);

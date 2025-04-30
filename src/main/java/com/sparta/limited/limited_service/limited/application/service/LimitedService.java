@@ -6,6 +6,7 @@ import com.sparta.limited.limited_service.limited.application.dto.response.Limit
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedListResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedOrderResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedProductResponse;
+import com.sparta.limited.limited_service.limited.application.dto.response.LimitedPurchaseAcceptResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedPurchaseOrderResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedPurchaseResponse;
 import com.sparta.limited.limited_service.limited.application.dto.response.LimitedReadResponse;
@@ -18,12 +19,13 @@ import com.sparta.limited.limited_service.limited.application.mapper.LimitedPurc
 import com.sparta.limited.limited_service.limited.application.service.limited_product.LimitedProductFacade;
 import com.sparta.limited.limited_service.limited.application.service.limited_product.dto.LimitedProductInfo;
 import com.sparta.limited.limited_service.limited.application.service.order.OrderClientService;
+import com.sparta.limited.limited_service.limited.application.validator.PurchaseLuaValidate;
 import com.sparta.limited.limited_service.limited.domain.exception.LimitedEventUnableChangeStatusException;
 import com.sparta.limited.limited_service.limited.domain.model.Limited;
 import com.sparta.limited.limited_service.limited.domain.model.LimitedPurchaseUser;
-import com.sparta.limited.limited_service.limited.domain.model.validator.LimitedStatusValidator;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedPurchaseRepository;
 import com.sparta.limited.limited_service.limited.domain.repository.LimitedRepository;
+import com.sparta.limited.limited_service.limited.infrastructure.redis.RedisService;
 import jakarta.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ import org.hibernate.StaleObjectStateException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +49,8 @@ public class LimitedService {
     private final LimitedPurchaseRepository limitedPurchaseRepository;
     private final LimitedProductFacade limitedProductFacade;
     private final OrderClientService orderClientService;
+    private final RedisService redisService;
+    private final DefaultRedisScript<Long> purchaseLuaScript;
 
     @Transactional
     public LimitedCreateResponse createLimitedEvent(UUID limitedProductId,
@@ -53,8 +58,15 @@ public class LimitedService {
 
         Limited limited = LimitedEventMapper.toCreateEntity(limitedProductId, request);
 
-        limitedRepository.save(limited);
-        return LimitedEventMapper.toCreateResponse(limited);
+        LimitedProductInfo productInfo = limitedProductFacade.getLimitedProductInfo(
+            limitedProductId);
+
+        Limited saveLimited = limitedRepository.save(limited);
+
+        redisService.generateInitQuantity(saveLimited.getId(), productInfo.quantity(),
+            saveLimited.getEndDate());
+
+        return LimitedEventMapper.toCreateResponse(saveLimited);
     }
 
     @Transactional(readOnly = true)
@@ -102,26 +114,59 @@ public class LimitedService {
     }
 
     @Transactional
-    public LimitedPurchaseOrderResponse purchaseOrder(Long userId, UUID limitedEventId,
-        LimitedOrderRequest request) {
+    public LimitedPurchaseOrderResponse purchaseOrderSchedule(Long userId, UUID limitedEventId,
+        Integer quantity) {
 
         Limited limited = limitedRepository.findById(limitedEventId);
 
-        LimitedStatusValidator.validateStatusIsActive(limitedEventId, limited.getStatus());
+        LimitedProductInfo limitedProductInfo = limitedProductFacade.decreaseLimitedProductQuantity(
+            quantity, limited.getLimitedProductId());
 
-        LimitedProductInfo productInfo = limitedProductFacade.decreaseQuantity(
-            limited.getLimitedProductId());
-
-        UUID orderId = orderClientService.createOrder(userId, productInfo, request);
+        UUID orderId = orderClientService.createOrder(limitedEventId, limited.getEndDate(),
+            userId, limitedProductInfo, quantity);
         LimitedOrderResponse orderResponse = LimitedOrderMapper.toOrderResponse(orderId,
-            productInfo,
-            request);
+            limitedProductInfo, quantity);
 
         LimitedPurchaseUser purchaseUser = LimitedPurchaseUser.of(userId, limitedEventId);
         limitedPurchaseRepository.save(purchaseUser);
+
         LimitedPurchaseResponse purchaseResponse = LimitedPurchaseMapper.toPurchaseResponse(
             purchaseUser);
 
         return LimitedEventDetailMapper.toPurchaseOrderResponse(purchaseResponse, orderResponse);
     }
+
+
+    public LimitedPurchaseAcceptResponse purchaseOrderRedis(Long userId, UUID limitedEventId,
+        LimitedOrderRequest request) {
+
+        List<String> keys = this.generateKeys(userId, limitedEventId);
+        Object[] args = this.generateArgs(request.getQuantity(), userId, limitedEventId);
+
+        Long result = redisService.executeLuaScript(purchaseLuaScript, keys, args);
+
+        PurchaseLuaValidate.validate(result, limitedEventId);
+
+        return LimitedPurchaseAcceptResponse.of("구매 요청이 정상적으로 접수되었습니다.");
+    }
+
+
+    private List<String> generateKeys(Long userId, UUID limitedEventId) {
+        return List.of(
+            "limited_event_status:" + limitedEventId,
+            "limited_purchase:" + limitedEventId + ":" + userId,
+            "limited_quantity:" + limitedEventId
+        );
+    }
+
+    private Object[] generateArgs(Integer orderQuantity, Long userId, UUID limitedEventId) {
+        return new Object[]{
+            "1",
+            "PENDING",
+            orderQuantity.toString(),
+            limitedEventId.toString(),
+            userId.toString(),
+        };
+    }
+
 }
